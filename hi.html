@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Your Name — Portfolio</title>
+  <meta name="description" content="Minimal one-page portfolio: About, Work, Photos." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0d12;
+      --surface: #121521;
+      --text: #e8ecf1;
+      --muted: #98a2b3;
+      --accent: #7dd3fc; /* soft cyan */
+      --link: #a5b4fc; /* soft indigo */
+      --ring: 0 0 0 2px rgba(125,211,252,.35);
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --header-blur: saturate(140%) blur(10px);
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f7f8fb;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --accent: #0ea5e9;
+        --link: #4f46e5;
+        --shadow: 0 10px 30px rgba(2,8,23,.08);
+        --ring: 0 0 0 2px rgba(14,165,233,.25);
+      }
+    }
+
+    html, body { height: 100%; }
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(125,211,252,.06), transparent 60%),
+                  radial-gradient(1000px 600px at 10% 110%, rgba(165,180,252,.08), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Floating header */
+    .site-header{
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      backdrop-filter: var(--header-blur);
+      -webkit-backdrop-filter: var(--header-blur);
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+      box-shadow: var(--shadow);
+      border-radius: 999px;
+      padding: 10px 14px;
+    }
+    .nav{
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .nav a{
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: color .2s ease, background .2s ease, transform .06s ease;
+      outline: none;
+    }
+    .nav a:hover{ color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+    .nav a:active{ transform: translateY(1px); }
+    .nav a[aria-current="page"]{
+      color: var(--text);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 35%, transparent), color-mix(in srgb, var(--accent) 15%, transparent));
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+
+    /* Sections */
+    section{
+      min-height: 100svh; /* full screen including mobile UI */
+      display: grid;
+      place-items: center;
+      padding: clamp(24px, 5vw, 64px);
+      position: relative;
+      isolation: isolate;
+    }
+    .card{
+      max-width: min(900px, 92vw);
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+      padding: clamp(24px, 4vw, 48px);
+      overflow: clip;
+    }
+    .kicker{
+      display:inline-block;
+      font-size: .9rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .6rem;
+    }
+    h1, h2{
+      margin: 0 0 .6rem 0;
+      line-height: 1.15;
+    }
+    h1{ font-size: clamp(2rem, 5vw, 3rem); }
+    h2{ font-size: clamp(1.6rem, 4vw, 2.2rem); }
+    p{ margin: .6rem 0 0 0; font-size: clamp(1rem, 1.6vw, 1.1rem); color: color-mix(in srgb, var(--text) 88%, transparent); }
+    .btn{
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.8rem 1rem; border-radius: 12px; text-decoration:none; font-weight:600;
+      color: var(--text); background: var(--link); border: none;
+      box-shadow: 0 6px 16px color-mix(in srgb, var(--link) 35%, transparent);
+      transition: transform .08s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .btn:hover{ filter: brightness(1.05); box-shadow: 0 10px 24px color-mix(in srgb, var(--link) 35%, transparent); }
+    .btn:active{ transform: translateY(1px); }
+
+    /* Photos grid */
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .grid img{
+      width: 100%; height: 100%; object-fit: cover; display:block; border-radius: 14px;
+      box-shadow: var(--shadow);
+      opacity: .98;
+      transition: transform .25s ease, opacity .25s ease;
+    }
+    .grid img:hover{ transform: scale(1.02); opacity: 1; }
+    .col-6{ grid-column: span 6; }
+    .col-4{ grid-column: span 4; }
+    .col-8{ grid-column: span 8; }
+    @media (max-width: 780px){
+      .col-8, .col-6, .col-4{ grid-column: span 12; }
+    }
+
+    /* Fade-in on scroll */
+    .reveal{
+      opacity: 0;
+      transform: translateY(18px) scale(0.995);
+      transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+    }
+    .reveal.in-view{
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Skip link for a11y */
+    .skip-link{
+      position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;
+    }
+    .skip-link:focus{
+      position: fixed; left: 16px; top: 16px; width: auto; height: auto; padding: .6rem .8rem;
+      background: var(--surface); color: var(--text); border-radius: 10px; box-shadow: var(--shadow);
+      outline: var(--ring);
+      z-index: 60;
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      .reveal, .reveal.in-view{ transition: none; transform: none; opacity: 1; }
+      .grid img{ transition: none; }
+    }
+
+    /* Footer note */
+    footer{
+      position: fixed; right: 14px; bottom: 10px; z-index: 40;
+      font-size: 12px; color: var(--muted);
+      opacity: .8;
+    }
+    footer a{ color: var(--link); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#about">Skip to content</a>
+
+  <!-- Floating header -->
+  <header class="site-header" role="banner" aria-label="Primary">
+    <nav class="nav" aria-label="Main">
+      <a href="#about"  data-nav="about"  aria-current="page">About</a>
+      <a href="#work"   data-nav="work">Work</a>
+      <a href="#photos" data-nav="photos">Photos</a>
+    </nav>
+  </header>
+
+  <!-- About -->
+  <section id="about" aria-labelledby="about-title">
+    <article class="card reveal">
+      <span class="kicker">Hello</span>
+      <h1 id="about-title">I build clean, fast web things.</h1>
+      <p>
+        I’m <strong>Your Name</strong>, a web developer who enjoys minimal, legible interfaces and delightful performance.
+        This single‑page layout is fully static, GitHub‑Pages‑friendly, and accessible.
+      </p>
+      <p style="margin-top:1rem">
+        <a class="btn" href="#work" aria-label="See my work">See my work ↓</a>
+      </p>
+    </article>
+  </section>
+
+  <!-- Work -->
+  <section id="work" aria-labelledby="work-title">
+    <article class="card reveal">
+      <span class="kicker">Selected Work</span>
+      <h2 id="work-title">Projects & case studies</h2>
+      <p>
+        Replace these with your projects. Each card fades in as it scrolls into view.
+        Keep copy short and scannable.
+      </p>
+      <div class="grid" style="margin-top:22px">
+        <div class="col-6 reveal">
+          <div class="card" style="padding:20px">
+            <h3 style="margin:.2rem 0 0 0">Project A</h3>
+            <p style="margin:.4rem 0 0 0; color:var(--muted)">Performance‑focused landing page.</p>
+            <p style="margin:.6rem 0 0 0"><a href="#" style="color:var(--link)">View case →</a></p>
+          </div>
+        </div>
+        <div class="col-6 reveal">
+          <div class="card" style="padding:20px">
+            <h3 style="margin:.2rem 0 0 0">Project B</h3>
+            <p style="margin:.4rem 0 0 0; color:var(--muted)">Accessible UI component library.</p>
+            <p style="margin:.6rem 0 0 0"><a href="#" style="color:var(--link)">View repo →</a></p>
+          </div>
+        </div>
+        <div class="col-4 reveal">
+          <div class="card" style="padding:20px">
+            <h3 style="margin:.2rem 0 0 0">Project C</h3>
+            <p style="margin:.4rem 0 0 0; color:var(--muted)">Static site generator templates.</p>
+            <p style="margin:.6rem 0 0 0"><a href="#" style="color:var(--link)">View case →</a></p>
+          </div>
+        </div>
+        <div class="col-8 reveal">
+          <div class="card" style="padding:20px">
+            <h3 style="margin:.2rem 0 0 0">Project D</h3>
+            <p style="margin:.4rem 0 0 0; color:var(--muted)">SPA with smooth transitions.</p>
+            <p style="margin:.6rem 0 0 0"><a href="#" style="color:var(--link)">View demo →</a></p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Photos -->
+  <section id="photos" aria-labelledby="photos-title">
+    <article class="card reveal">
+      <span class="kicker">Photos</span>
+      <h2 id="photos-title">Little snapshots</h2>
+      <p>Add your own images. These are placeholders using <code>picsum.photos</code>.</p>
+      <div class="grid" style="--rows:3; margin-top: 18px">
+        <img class="col-4 reveal" src="https://picsum.photos/600/800?random=1"  alt="Sample photo 1" loading="lazy" width="600" height="800">
+        <img class="col-8 reveal" src="https://picsum.photos/1000/800?random=2" alt="Sample photo 2" loading="lazy" width="1000" height="800">
+        <img class="col-6 reveal" src="https://picsum.photos/900/700?random=3"  alt="Sample photo 3" loading="lazy" width="900" height="700">
+        <img class="col-6 reveal" src="https://picsum.photos/900/700?random=4"  alt="Sample photo 4" loading="lazy" width="900" height="700">
+        <img class="col-8 reveal" src="https://picsum.photos/1000/700?random=5" alt="Sample photo 5" loading="lazy" width="1000" height="700">
+        <img class="col-4 reveal" src="https://picsum.photos/600/700?random=6"  alt="Sample photo 6" loading="lazy" width="600" height="700">
+      </div>
+    </article>
+  </section>
+
+  <footer>
+    <span>© <span id="year"></span> Your Name • <a href="#about">Back to top</a></span>
+  </footer>
+
+  <script>
+    // Update year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Intersection Observer to reveal elements on scroll
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) {
+      const revealEls = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            // Unobserve to avoid toggling back/forth
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(el => io.observe(el));
+    } else {
+      // If reduced motion, ensure content is visible
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+    }
+
+    // Highlight active nav link based on current section
+    const sections = [...document.querySelectorAll('section')];
+    const navLinks = [...document.querySelectorAll('.nav a')];
+
+    const setActive = (id) => {
+      navLinks.forEach(a => {
+        a.setAttribute('aria-current', a.dataset.nav === id ? 'page' : 'false');
+      });
+    };
+
+    const spy = new IntersectionObserver((entries) => {
+      // Pick the most visible section
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setActive(visible.target.id);
+    }, { threshold: [0.3, 0.6] });
+
+    sections.forEach(s => spy.observe(s));
+
+    // Close the mobile address bar "jump" by nudging on hash navigation (optional)
+    window.addEventListener('hashchange', () => {
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    }, { passive: true });
+  </script>
+</body>
+</html>
